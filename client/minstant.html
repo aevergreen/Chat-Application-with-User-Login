@@ -1,0 +1,129 @@
+<head>
+  <title>minstant</title>
+</head>
+
+<body>
+</body>
+
+<!-- this is the main template used by iron:router to build the page -->
+<template name="ApplicationLayout">
+	{{> yield "header"}}
+	
+	<div class="container">
+	{{> yield "main"}}
+	</div>
+</template>
+
+<!-- top level template for the nav bar -->
+<template name="navbar">
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">
+        Minstant!
+      </a>
+    </div>
+    <div class="nav navbar-nav">
+    {{> loginButtons}}
+</div>
+  </div>
+</nav>
+</template>
+
+<!-- Top level template for the lobby page -->
+<template name="lobby_page">
+	{{> available_user_list}}
+</template>
+
+<!-- display a list of users -->
+<template name="available_user_list">
+	<h2>Choose someone to chat with:</h2>
+	<div class="row">
+	{{#each users}}
+	{{> available_user}}
+	{{/each}}
+</div>
+</template>
+
+<!-- display an individual user -->
+<template name="available_user">
+	<div class="col-md-2">
+		<div class="user_avatar">
+			{{#if isMyUser _id}} 
+			<div class="bg-success">{{getUsername _id}} (YOU)
+				<br/>
+				<img src="/{{profile.avatar}}" class="avatar_img">			
+			</div>
+			{{else}}
+			<a href="/chat/{{_id}}">
+				{{getUsername _id}}
+				<br/>
+				<img src="/{{profile.avatar}}" class="avatar_img">
+			</a>
+			{{/if}}
+		</div>
+	</div>
+</template>
+
+
+<!-- Top level template for the chat page -->
+<template name="chat_page">
+	<div class="message-header">
+		<a href="/"><span class="glyphicon glyphicon-menu-left"></span>Back</a>
+		<br />
+		<span class="h2">You are chatting with: {{chat_user}} <img src="/{{avatar_user}}" class="avatar_img"></span>
+	</div>
+	<h2>Type in the box below to send a message!</h2>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="well well-lg">
+			{{#each messages}}
+			{{> chat_message}}
+			{{/each}}
+			</div>	
+		</div>
+	</div>
+    <div class="row">
+		<div class="col-md-12">
+			<form class="js-send-chat">
+			<input class="input" type="text" name="chat" placeholder="type a message here...">
+			<button class="btn btn-default">send</button>
+		</form>
+		</div>
+	</div>
+</template>
+
+<!-- simple template that displays a message -->
+<template name="chat_message">
+
+
+	{{#if isSameUser userid}}
+		<div class="text-right padding-message"><span class="message message-sent">{{{parseEmoticons text}}}</span> <img src="/ava1.png" class="message_avatar"/></div>
+	{{else}}
+		<div class="text-left padding-message"><img src="/ava1.png" class="message_avatar"/> <span class="message message-received">{{{parseEmoticons text}}}</span></div>
+	{{/if}}
+	
+</template>
+
+<template name="landing_page">
+    <h1 class="text-center">Welcome to Minstant!</h1>
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <h3>List of test users and passwords:</h3>
+            <ul>
+                <li>user1@test.com - test123</li>
+                <li>user2@test.com - test123</li>
+                <li>user3@test.com - test123</li>
+                <li>user4@test.com - test123</li>
+                <li>user5@test.com - test123</li>
+                <li>user6@test.com - test123</li>
+                <li>user7@test.com - test123</li>
+                <li>user8@test.com - test123</li>
+            </ul>
+        </div>
+        
+        <div class="col-xs-12 col-sm-6">
+            <h3 class="text-center">Includes emoticons from <a href="https://atmospherejs.com/mattimo/emoticons" target="_blank">mattimo:emoticons</a></h3>
+        </div>
+    </div>
+</template>
